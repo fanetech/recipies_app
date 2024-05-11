@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipies_app/services/auth_service.dart';
+import 'package:status_alert/status_alert.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -111,7 +112,17 @@ class _LoginPageState extends State<LoginPage> {
             _loginFormKey.currentState!.save();
             print("Username: $username, Password: $password");
             bool result = await AuthService().login(username!, password!);
-            print(result);
+            if(result){
+              Navigator.pushReplacementNamed(context, '/home');
+            } else {
+              StatusAlert.show(context,
+                duration: const Duration(seconds: 2),
+                title: "Login Failed",
+                subtitle: "Please check your credentials",
+                configuration: const IconConfiguration(icon: Icons.error, size: 50),
+                maxWidth: 260,
+              );
+            }
           }
         },
         child: const Text("Login"),
